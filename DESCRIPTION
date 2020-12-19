@@ -1,0 +1,18 @@
+Package: StatComp20029
+Type: Package
+Title: bin multidimensional data into a two-way contingency table and construct density polygon of bivariate data
+Version: 1.0
+Date: 2020-12-16
+Author: 20029
+Maintainer: Shao Lihui <shaolh@mail.ustc.edu.cn>
+Description: bin multidimensional data into a two-way contingency table, construct density polygon of bivariate data.
+License: GPL (>= 2)
+Imports: Rcpp (>= 1.0.5), Ball, DAAG, MASS, RANN, boot, bootstrap, energy, microbenchmark, xtable
+Encoding: UTF-8
+LinkingTo: Rcpp
+RoxygenNote: 7.1.1
+Suggests: knitr, rmarkdown 
+VignetteBuilder: knitr
+URL: https://github.com/shao-lh/StatComp20029
+BugReports: https://github.com/shao-lh/StatComp20029/issues
+

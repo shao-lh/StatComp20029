@@ -1,0 +1,57 @@
+---
+title: "Introduction to functions"
+author: "20029"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+__StatComp20029__ is a simple R package developed to bin multidimensional data into a two-way contingency table and construct density polygon of bivariate data. Two functions are provided, _bin2d_ (bin multidimensional data into a two-way contingency table) and _Dplot_ (construct density polygon of bivariate data). 
+
+## _bin2d_
+The source R code for _bin2d_ is as follows:
+```{r,eval=FALSE}
+bin2d<-function(x,column1,column2,WhetherNominal1=FALSE,WhetherNominal2=FALSE,breaks1 = "Sturges", breaks2 = "Sturges"){ 
+  
+  if (WhetherNominal1==FALSE){
+    histg1 <- hist(x[,column1], breaks = breaks1, plot = FALSE) 
+    br1 <- histg1$breaks
+    mids1 <- histg1$mids
+  }else {br1<-colnames(x)[column1];mids1 <-unique(x[,column2])}
+  
+  if (WhetherNominal2==FALSE){
+    histg2 <- hist(x[,column2], breaks = breaks2, plot = FALSE) 
+    br2 <- histg2$breaks
+    mids2 <- histg2$mids
+  }else {br2<-colnames(x)[column2];mids2 <-unique(x[,column2])}
+  
+  freq <- with(x,table(
+    if (WhetherNominal1==FALSE) cut(x[,column1],br1) else get(br1), 
+    if (WhetherNominal2==FALSE) cut(x[,column2],br2) else get(br2)))
+  
+  return(list(call = match.call(), freq = freq, breaks1 = br1, breaks2 = br2, mids1 = mids1, mids2 = mids2))
+}
+```
+
+## _Dplot_
+The source R code for _Dplot_ is as follows:
+```{r,eval=FALSE}
+Dplot<-function(x,breaks1 = "Sturges", breaks2 = "Sturges"){
+  histg1 <- hist(x[,1], breaks = breaks1, plot = FALSE) 
+  histg2 <- hist(x[,2], breaks = breaks2, plot = FALSE)
+  br1 <- histg1$breaks
+  br2 <- histg2$breaks
+  freq <- table(cut(x[,1], br1), cut(x[,2], br2))
+  h1 <- diff(br1) 
+  h2 <- diff(br2)
+  h <- outer(h1, h2, "*")
+  Z <- freq / (n * h) # the density estimate
+  persp(x=histg1$mids, y=histg2$mids, z=Z, shade=TRUE, xlab="Column1", ylab="Column2", zlab="density estimate",main="", theta=45, phi=30, ltheta=60)
+}
+```
+
